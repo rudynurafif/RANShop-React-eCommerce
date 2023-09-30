@@ -12,8 +12,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingAddress,
     paymentMethod,
     itemsPrice,
-    taxPrice,
     shippingPrice,
+    taxPrice,
     totalPrice,
   } = req.body
 
@@ -22,10 +22,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
     throw new Error('No order items')
   } else {
     const order = new Order({
-      orderItems: orderItems.map(x => ({
+      orderItems: orderItems.map((x) => ({
         ...x,
         product: x._id,
-        _id: undefined
+        _id: undefined,
       })),
       user: req.user._id,
       shippingAddress,
@@ -58,7 +58,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
  * @access Private
  */
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate('user', 'name email')   
+  const order = await Order.findById(req.params.id).populate('user', 'name email')
 
   if (order) {
     res.status(200).json(order)
@@ -70,16 +70,35 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 /**
  * @description Update order to paid
- * @route GET /api/orders/:id/pay
+ * @route PUT /api/orders/:id/pay
  * @access Private
  */
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  res.send('update order to paid')
+  const order = await Order.findById(req.params.id)
+
+  if (order) {
+    order.isPaid = true
+    order.paidAt = Date.now()
+    // come from PayPal format
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    }
+
+    const updatedOrder = order.save()
+
+    res.status(200).json(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
 })
 
 /**
  * @description Update order to delivered
- * @route GET /api/orders/:id/deliver
+ * @route PUT /api/orders/:id/deliver
  * @access Private/Admin
  */
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
