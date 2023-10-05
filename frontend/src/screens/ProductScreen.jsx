@@ -58,17 +58,17 @@ const ProductScreen = () => {
 
   return (
     <div>
+      <Link className='btn btn-light my-3' to='/'>
+        Go Back
+      </Link>
       {isLoading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'> {error.data.message || error.error} </Message>
       ) : (
         <div>
-          <Link className='btn btn-light my-3' to='/'>
-            Go Back
-          </Link>
           <>
-          <Meta title={product.name} description={product.description} />
+            <Meta title={product.name} description={product.description} />
             <Row>
               <Col md={5}>
                 <Image src={product.image} alt={product.name} fluid />
