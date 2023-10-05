@@ -5,8 +5,9 @@ const reviewSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: 'User'
     },
-    user: {
+    name: {
       type: String,
       required: true,
     },
@@ -15,7 +16,7 @@ const reviewSchema = mongoose.Schema(
       required: true,
     },
     comment: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
