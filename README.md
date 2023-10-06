@@ -1,5 +1,8 @@
-# ranshop
-Build an eCommerce platform from the ground up with React, Redux Toolkit, Express &amp; MongoDB
+# RANShop | eCommerce Platform
+
+> eCommerce platform built with the MERN stack & Redux.
+
+<img src="./frontend/public/images/screens.png">
 
 - [Features](#features)
 - [Usage](#usage)
