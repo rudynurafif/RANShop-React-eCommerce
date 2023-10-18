@@ -2,7 +2,7 @@
 
 > eCommerce platform built with the MERN stack & Redux.
 
-<img src="./frontend/public/images/screens.png">
+<img src="./frontend/public/images/screens.jpg">
 
 - [Features](#features)
 - [Usage](#usage)
@@ -102,4 +102,4 @@ jane@email.com (Customer)
 
 ---
 
-credit to : Traversy Media https://traversymedia.com https://www.udemy.com/user/brad-traversy/
+credit to : Brad Traversy https://www.udemy.com/user/brad-traversy/
