@@ -1,37 +1,37 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
-import Message from '../../components/Message'
-import Loader from '../../components/Loader'
-import FormContainer from '../../components/FormContainer'
-import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Form, Button } from 'react-bootstrap';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import FormContainer from '../../components/FormContainer';
+import { toast } from 'react-toastify';
 import {
   useUpdateProductMutation,
   useGetProductDetailsQuery,
   useUploadProductImageMutation,
-} from '../../slices/productsApiSlice'
+} from '../../slices/productsApiSlice';
 
 const ProductEditScreen = () => {
-  const { id: productId } = useParams()
-  const navigate = useNavigate()
+  const { id: productId } = useParams();
+  const navigate = useNavigate();
 
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
-  const [description, setDescription] = useState('')
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState(0);
+  const [image, setImage] = useState('');
+  const [brand, setBrand] = useState('');
+  const [category, setCategory] = useState('');
+  const [countInStock, setCountInStock] = useState(0);
+  const [description, setDescription] = useState('');
 
-  const { data: product, isLoading, error } = useGetProductDetailsQuery(productId)
+  const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
 
-  const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation()
+  const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
 
   const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation()
+    useUploadProductImageMutation();
 
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const updatedProduct = {
       productId,
       name,
@@ -41,40 +41,56 @@ const ProductEditScreen = () => {
       category,
       description,
       countInStock,
-    }
+    };
 
-    const result = await updateProduct(updatedProduct)
+    const result = await updateProduct(updatedProduct);
     if (result.error) {
-      toast.error(result.error)
+      toast.error(result.error);
     } else {
-      toast.success('Product updated')
-      navigate('/admin/productlist')
+      toast.success('Product updated');
+      navigate('/admin/productlist');
     }
-  }
+  };
 
   useEffect(() => {
     if (product) {
-      setName(product.name)
-      setPrice(product.price)
-      setImage(product.image)
-      setBrand(product.brand)
-      setCategory(product.category)
-      setCountInStock(product.countInStock)
-      setDescription(product.description)
+      setName(product.name);
+      setPrice(product.price);
+      setImage(product.image);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
     }
-  }, [product])
+  }, [product]);
 
   const uploadFileHandler = async (e) => {
-    const formData = new FormData()
-    formData.append('image', e.target.files[0])
-    try {
-      const res = await uploadProductImage(formData).unwrap()
-      toast.success(res.message)
-      setImage(res.image)
-    } catch (error) {
-      toast.error(error?.data?.message || error.error)
-    }
-  }
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      const img = new Image();
+      img.src = reader.result;
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 640;
+        canvas.height = 510;
+        ctx.drawImage(img, 0, 0, 640, 510);
+        canvas.toBlob(async (blob) => {
+          const formData = new FormData();
+          formData.append('image', blob, file.name);
+          try {
+            const res = await uploadProductImage(formData).unwrap();
+            toast.success(res.message);
+            setImage(res.image);
+          } catch (error) {
+            toast.error(error?.data?.message || error.error);
+          }
+        }, 'image/jpeg');
+      };
+    };
+  };
 
   return (
     <>
@@ -180,7 +196,7 @@ const ProductEditScreen = () => {
         )}
       </FormContainer>
     </>
-  )
-}
+  );
+};
 
-export default ProductEditScreen
+export default ProductEditScreen;
