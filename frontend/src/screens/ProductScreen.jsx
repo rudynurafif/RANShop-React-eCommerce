@@ -1,60 +1,60 @@
-import { Link } from 'react-router-dom'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
-import { useParams, useNavigate } from 'react-router-dom'
-import Rating from '../components/Rating'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
+import { Link } from 'react-router-dom';
+import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
+import { useParams, useNavigate } from 'react-router-dom';
+import Rating from '../components/Rating';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
-} from '../slices/productsApiSlice'
-import { useState } from 'react'
-import { addToCart } from '../slices/cartSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import Meta from '../components/Meta'
+} from '../slices/productsApiSlice';
+import { useState } from 'react';
+import { addToCart } from '../slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import Meta from '../components/Meta';
 
 const ProductScreen = () => {
-  const { id: productId } = useParams()
+  const { id: productId } = useParams();
   const {
     data: product,
     isLoading,
     refetch,
     error,
-  } = useGetProductDetailsQuery(productId)
-  const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation()
+  } = useGetProductDetailsQuery(productId);
+  const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation();
 
-  const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [qty, setQty] = useState(1)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
+  const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }))
-    navigate('/cart')
-  }
+    dispatch(addToCart({ ...product, qty }));
+    navigate('/cart');
+  };
 
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       await createReview({
         productId,
         rating,
         comment,
-      }).unwrap()
-      refetch()
-      toast.success('Review submitted')
-      setRating(0)
-      setComment('')
+      }).unwrap();
+      refetch();
+      toast.success('Review submitted');
+      setRating(0);
+      setComment('');
     } catch (error) {
-      toast.error(error?.data?.message || error.error)
+      toast.error(error?.data?.message || error.error);
     }
-  }
+  };
 
   return (
     <div>
@@ -210,7 +210,7 @@ const ProductScreen = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductScreen
+export default ProductScreen;
