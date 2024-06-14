@@ -1,41 +1,42 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { Table, Form, Button, Row, Col } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import { FaTimes } from 'react-icons/fa'
-import { useProfileMutation } from '../slices/usersApiSlice'
-import { setCredentials } from '../slices/authSlice'
-import { useGetMyOrdersQuery } from '../slices/ordersApiSlice'
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Table, Form, Button, Row, Col } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
+import { FaTimes } from 'react-icons/fa';
+import { useProfileMutation } from '../slices/usersApiSlice';
+import { setCredentials } from '../slices/authSlice';
+import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
+import Meta from '../components/Meta';
 
 const ProfileScreen = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation()
+  const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation();
 
-  const { data: orders, isLoading, error } = useGetMyOrdersQuery()
+  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
-      setName(userInfo.name)
-      setEmail(userInfo.email)
+      setName(userInfo.name);
+      setEmail(userInfo.email);
     }
-  }, [userInfo, userInfo.name, userInfo.email])
+  }, [userInfo, userInfo.name, userInfo.email]);
 
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Password do not match')
+      toast.error('Password do not match');
     } else {
       try {
         const res = await updateProfile({
@@ -43,19 +44,20 @@ const ProfileScreen = () => {
           name,
           email,
           password,
-        }).unwrap()
-        dispatch(setCredentials(res))
-        toast.success('Profile updated successfully')
+        }).unwrap();
+        dispatch(setCredentials(res));
+        toast.success('Profile updated successfully');
       } catch (error) {
-        toast.error(error?.data?.message || error.error)
+        toast.error(error?.data?.message || error.error);
       }
     }
-  }
+  };
 
   return (
     <Row>
       <Col md={3}>
         <h2>User Profile</h2>
+        <Meta title={`${userInfo.name}'s Profile`} />
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name' className='my-2'>
             <Form.Label>Name</Form.Label>
@@ -156,7 +158,7 @@ const ProfileScreen = () => {
         )}
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-export default ProfileScreen
+export default ProfileScreen;

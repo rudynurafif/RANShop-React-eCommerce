@@ -1,12 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Carousel, Image } from 'react-bootstrap'
-import Loader from './Loader'
-import Message from './Message'
-import { useGetTopProductsQuery } from '../slices/productsApiSlice'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Carousel, Image } from 'react-bootstrap';
+import Loader from './Loader';
+import Message from './Message';
+import { useGetTopProductsQuery } from '../slices/productsApiSlice';
 
 const ProductCarousel = () => {
-  const { data: products, isLoading, error } = useGetTopProductsQuery()
+  const { data: products, isLoading, error } = useGetTopProductsQuery();
 
   return isLoading ? (
     <Loader />
@@ -19,7 +19,7 @@ const ProductCarousel = () => {
           <Link to={`/product/${product._id}`}>
             <Image src={product.image} alt={product.name} fluid />
             <Carousel.Caption className='carousel-caption'>
-              <h2 >
+              <h2>
                 {product.name} (${product.price})
               </h2>
             </Carousel.Caption>
@@ -27,7 +27,7 @@ const ProductCarousel = () => {
         </Carousel.Item>
       ))}
     </Carousel>
-  )
-}
+  );
+};
 
-export default ProductCarousel
+export default ProductCarousel;

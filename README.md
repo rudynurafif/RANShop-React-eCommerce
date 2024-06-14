@@ -93,10 +93,10 @@ Sample User Logins
 admin@email.com (Admin)
 password
 
-john@email.com (Customer)
+rudy@email.com (Customer)
 123456
 
-jane@email.com (Customer)
+nurafif@email.com (Customer)
 123456
 ```
 

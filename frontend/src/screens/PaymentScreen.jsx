@@ -1,36 +1,38 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { Form, Col, Button } from 'react-bootstrap'
-import FormContainer from '../components/FormContainer'
-import CheckoutSteps from '../components/CheckoutSteps'
-import { savePaymentMethod } from '../slices/cartSlice'
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Form, Col, Button } from 'react-bootstrap';
+import FormContainer from '../components/FormContainer';
+import CheckoutSteps from '../components/CheckoutSteps';
+import { savePaymentMethod } from '../slices/cartSlice';
+import Meta from '../components/Meta';
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPaymentMethod] = useState('PayPal')
+  const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const cart = useSelector(state => state.cart)
-  const { shippingAddress } = cart
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
 
   useEffect(() => {
     if (!shippingAddress) {
-      navigate('/shipping')
+      navigate('/shipping');
     }
-  }, [shippingAddress, navigate])
+  }, [shippingAddress, navigate]);
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(savePaymentMethod(paymentMethod))
-    navigate('/placeorder')
-  }
+    e.preventDefault();
+    dispatch(savePaymentMethod(paymentMethod));
+    navigate('/placeorder');
+  };
 
   return (
     <FormContainer>
       <CheckoutSteps step1 step2 step3 />
+      <Meta title='Select Payment Method' />
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group>
@@ -54,7 +56,7 @@ const PaymentScreen = () => {
         </Button>
       </Form>
     </FormContainer>
-  )
-}
+  );
+};
 
-export default PaymentScreen
+export default PaymentScreen;

@@ -1,29 +1,30 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
-import { toast } from 'react-toastify'
-import CheckoutSteps from '../components/CheckoutSteps'
-import Message from '../components/Message' 
-import Loader from '../components/Loader'
-import { useCreateOrderMutation } from '../slices/ordersApiSlice'
-import { clearCartItems } from '../slices/cartSlice'
+import React from 'react';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import CheckoutSteps from '../components/CheckoutSteps';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
+import { useCreateOrderMutation } from '../slices/ordersApiSlice';
+import { clearCartItems } from '../slices/cartSlice';
+import Meta from '../components/Meta';
 
 const PlaceOrderScreen = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const cart = useSelector((state) => state.cart)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
 
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation()
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
-      navigate('/shipping')
+      navigate('/shipping');
     } else if (!cart.paymentMethod) {
-      navigate('/payment')
+      navigate('/payment');
     }
-  }, [cart.paymentMethod, cart.shippingAddress.address, navigate])
+  }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
 
   const placeOrderHandler = async () => {
     try {
@@ -35,17 +36,18 @@ const PlaceOrderScreen = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-      }).unwrap()
-      dispatch(clearCartItems())
-      navigate(`/order/${res._id}`)
+      }).unwrap();
+      dispatch(clearCartItems());
+      navigate(`/order/${res._id}`);
     } catch (error) {
-      toast.error(error)
+      toast.error(error);
     }
-  }
+  };
 
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4 />
+      <Meta title='Order Confirmation' />
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
@@ -142,7 +144,7 @@ const PlaceOrderScreen = () => {
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default PlaceOrderScreen
+export default PlaceOrderScreen;

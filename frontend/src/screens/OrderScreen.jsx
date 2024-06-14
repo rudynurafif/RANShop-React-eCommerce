@@ -1,36 +1,37 @@
-import React, { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { Row, Col, ListGroup, Image, Button, Card } from 'react-bootstrap'
-import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import React, { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Row, Col, ListGroup, Image, Button, Card } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
 import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
   useDeliverOrderMutation,
-} from '../slices/ordersApiSlice'
+} from '../slices/ordersApiSlice';
+import Meta from '../components/Meta';
 
 const OrderScreen = () => {
-  const { id: orderId } = useParams()
+  const { id: orderId } = useParams();
 
-  const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId)
+  const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
 
-  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation()
+  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer()
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
-  const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation()
+  const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
 
   const {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPayPal,
-  } = useGetPayPalClientIdQuery()
+  } = useGetPayPalClientIdQuery();
 
-  const { userInfo } = useSelector((state) => state.auth)
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -41,16 +42,17 @@ const OrderScreen = () => {
             'client-id': paypal.clientId,
             currency: 'USD',
           },
-        })
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
-      }
+        });
+        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+      };
+
       if (order && !order.isPaid) {
         if (!window.paypal) {
-          loadPayPalScript()
+          loadPayPalScript();
         }
       }
     }
-  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal])
+  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
   // async function onApproveTest() {
   //   await payOrder({ orderId, details: { payer: {} } })
@@ -61,27 +63,27 @@ const OrderScreen = () => {
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
-        await payOrder({ orderId, details }).unwrap()
-        refetch()
-        toast.success('Payment Successful')
+        await payOrder({ orderId, details }).unwrap();
+        refetch();
+        toast.success('Payment Successful');
       } catch (error) {
-        toast.error(error?.data?.message || error.message)
+        toast.error(error?.data?.message || error.message);
       }
-    })
+    });
   }
 
   const deliverOrderHandler = async () => {
     try {
-      await deliverOrder(orderId)
-      refetch()
-      toast.success('Order delivered')
+      await deliverOrder(orderId);
+      refetch();
+      toast.success('Order delivered');
     } catch (error) {
-      toast.error(error?.data?.message || error.message)
+      toast.error(error?.data?.message || error.message);
     }
-  }
+  };
 
   function onError(error) {
-    toast.error(error.message)
+    toast.error(error.message);
   }
 
   function createOrder(data, actions) {
@@ -93,7 +95,7 @@ const OrderScreen = () => {
           },
         },
       ],
-    })
+    });
   }
 
   return isLoading ? (
@@ -102,6 +104,7 @@ const OrderScreen = () => {
     <Message variant='danger'>{error?.data?.message || error.error}</Message>
   ) : (
     <div>
+      <Meta title='Order Information' />
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
@@ -224,7 +227,7 @@ const OrderScreen = () => {
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default OrderScreen
+export default OrderScreen;
