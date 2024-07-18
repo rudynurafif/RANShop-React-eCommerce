@@ -39,7 +39,7 @@ const ProductScreen = () => {
     // navigate('/cart');
   };
 
-  const submitHandler = async (e) => {
+  const reviewSubmitHandler = async (e) => {
     e.preventDefault();
 
     try {
@@ -163,7 +163,7 @@ const ProductScreen = () => {
                     {loadingProductReview && <Loader />}
 
                     {userInfo ? (
-                      <Form onSubmit={submitHandler}>
+                      <Form onSubmit={reviewSubmitHandler}>
                         <Form.Group className='my-2' controlId='rating'>
                           <Form.Label>Rating</Form.Label>
                           <Form.Control
