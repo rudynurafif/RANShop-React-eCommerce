@@ -90,7 +90,7 @@ npm run data:destroy
 ```
 Sample User Logins
 
-admin@email.com (Admin)
+admin1@email.com (Admin)
 password
 
 rudy@email.com (Customer)
@@ -101,5 +101,3 @@ nurafif@email.com (Customer)
 ```
 
 ---
-
-credit to : Brad Traversy https://www.udemy.com/user/brad-traversy/
