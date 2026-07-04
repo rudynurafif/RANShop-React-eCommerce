@@ -2,12 +2,13 @@ import React from 'react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Rating from './Rating'
+import imageFallback from '../utils/imageFallback'
 
 const Product = ({ product }) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant='top' style={{ height: '' }} />
+        <Card.Img src={product.image} onError={imageFallback} variant='top' style={{ height: '' }} />
       </Link>
 
       <Card.Body>

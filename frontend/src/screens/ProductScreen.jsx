@@ -13,6 +13,7 @@ import { addToCart } from '../slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Meta from '../components/Meta';
+import imageFallback from '../utils/imageFallback';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -72,7 +73,7 @@ const ProductScreen = () => {
             <Meta title={product.name} description={product.description} />
             <Row>
               <Col md={5}>
-                <Image src={product.image} alt={product.name} fluid />
+                <Image src={product.image} alt={product.name} onError={imageFallback} fluid />
               </Col>
               <Col md={4}>
                 <ListGroup variant='flush'>

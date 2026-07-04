@@ -10,6 +10,7 @@ import Loader from '../components/Loader';
 import { useCreateOrderMutation } from '../slices/ordersApiSlice';
 import { clearCartItems } from '../slices/cartSlice';
 import Meta from '../components/Meta';
+import imageFallback from '../utils/imageFallback';
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const PlaceOrderScreen = () => {
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
-                          <Image src={item.image} alt={item.name} fluid rounded />
+                          <Image src={item.image} alt={item.name} onError={imageFallback} fluid rounded />
                         </Col>
                         <Col>
                           <Link to={`/product/${item._id}`}>{item.name}</Link>

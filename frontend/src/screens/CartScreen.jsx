@@ -6,6 +6,7 @@ import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
 import { addToCart, removeFromCart } from '../slices/cartSlice';
 import Meta from '../components/Meta';
+import imageFallback from '../utils/imageFallback';
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const CartScreen = () => {
               <ListGroup.Item key={item._id}>
                 <Row>
                   <Col md={2}>
-                    <Image src={item.image} alt={item.name} fluid rounded />
+                    <Image src={item.image} alt={item.name} onError={imageFallback} fluid rounded />
                   </Col>
                   <Col md={4}>
                     <Link to={`/product/${item._id}`}>{item.name}</Link>

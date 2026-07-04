@@ -13,6 +13,7 @@ import {
   useDeliverOrderMutation,
 } from '../slices/ordersApiSlice';
 import Meta from '../components/Meta';
+import imageFallback from '../utils/imageFallback';
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -146,7 +147,7 @@ const OrderScreen = () => {
                 <ListGroup.Item key={index}>
                   <Row>
                     <Col md={1}>
-                      <Image src={item.image} alt={item.name} rounded fluid />
+                      <Image src={item.image} alt={item.name} onError={imageFallback} rounded fluid />
                     </Col>
                     <Col>
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
